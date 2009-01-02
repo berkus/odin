@@ -1,0 +1,22 @@
+/* simple console output (and even primitive input) */
+
+interface Console
+{
+	ctor() : void private; /* available only to ORB CREATE method */
+	dtor() : void private;
+
+	gotoxy      ( x : uint, y : uint ) : void public;
+	print_int   ( i : int  )           : void public;
+	print_char  ( c : uint )           : void public;
+	print_dword ( d : uint )           : void public;
+	print_word  ( w : uint )           : void public;
+	print_byte  ( b : uint )           : void public;
+	print       ( s : string )         : void public;
+	scroll_up()                        : void public;
+	newline()                          : void public;
+
+	wait_ack()                         : void public;
+	debug_showregs()                   : void public;
+	debug_showstack()                  : void public;
+	debug_showmem()                    : void public;
+};

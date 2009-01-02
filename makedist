@@ -1,0 +1,9 @@
+#!/bin/sh
+
+VER=`cat version`
+PACKAGE=odin-$VER-`date +%Y%m%d`.tar.bz2
+
+find odin -type d -name "CVS" -print > tar-exclude
+find odin -type f -name "*.ps" -print >> tar-exclude
+tar cvhjfX $PACKAGE tar-exclude odin
+rm -f tar-exclude

@@ -1,0 +1,27 @@
+# This file is intended to be both human- and machine-readable.
+# Entries are sorted by last name ascending.
+# F: first name, M: middle name, L: last name, N: nick name, 
+# R: project role, E: email, A: smail, C: made contributions
+# Lines not starting with /^[FMLNREAC]: / are ignored.
+
+F: Stanislav
+L: Karchebny
+N: berkus
+E: berk@madfire.net
+R: Current Odin maintainer
+
+F: Igor
+L: Kucheryavenkov
+N: alar
+E: aik@limb.asn.ru
+R: Developer
+
+F: Greg
+L: Law
+E: glaw@nexwave-solutions.fr
+R: Original Go! OS creator
+
+F: German
+M: L.
+L: Osella Massa
+R: Contributed some worthy notes and ideas, then simply vanished. Pity.

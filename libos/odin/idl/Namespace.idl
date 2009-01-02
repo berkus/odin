@@ -1,0 +1,15 @@
+/*
+ * component namespace resolver
+ *
+ * returns component based on the lookup name, or NOCOMP if no matching comp found.
+ */
+
+module Odin
+{
+   interface Namespace
+   {
+	   comp lookup(
+         in string name // '/'-separated pathname of component to look up
+      );
+   }
+};

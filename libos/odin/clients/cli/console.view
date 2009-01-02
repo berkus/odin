@@ -1,0 +1,36 @@
+ console number
+ vv current time
+    vvvv current path to eol
+         vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+ alloc'd Kb
+ vvvvvv total Kb
+        vvvvvv mem mgr efficiency (alloc'd memory div support structures size)
+               vvvv
+
+[0 |1815|/src/files/fancyconsole/                                                ] -> green bg
+[000220/131072 035%                                                     Type mem ] /<- status line
+[                                                                                ] \
+[                                                                                ] |
+[scrollable workarea                                                             ] |
+[scroll with Ctrl-Up/Down/PgUp/PgDn                                              ]  > black bg
+[                                                                                ] |
+[                                                                                ] |
+[                                                                                ] /
+[odin# command line prompt here                                                  ] -> green bg
+
+
+| Type mem | <- delay 2 secs here
+| ype mem  |
+| pe mem f |
+| e mem fo |
+|  mem for |
+| mem for  |
+| em for i |
+| m for in |
+|  for inf |
+| for info | <- delay 2 secs here
+
+cli:
+rm *  removes in current dir
+rm */ removes recursively
+

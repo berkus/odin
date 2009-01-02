@@ -1,0 +1,6 @@
+interface runnable
+{
+  void ctor(int start);
+  void dtor();
+  void run();
+};

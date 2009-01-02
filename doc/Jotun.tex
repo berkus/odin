@@ -1,0 +1,195 @@
+% Jotun File Format Specification, version 1.0.2.
+% $Id: Jotun.tex,v 1.1.1.1 2002/08/20 10:03:09 berkus Exp $
+
+% TODO: fix <johndoe@> style (converts <> into spanish stuff!!)
+%       fix spelling Jotun correct ('o or "o instead of o!!)
+
+\documentclass[onecolumn]{article}
+
+\usepackage{graphicx}
+
+\pagestyle{empty}
+\setlength{\textheight}{8.75in}
+\setlength{\columnsep}{2.0pc}
+\setlength{\textwidth}{6.8in}
+\setlength{\topmargin}{0.25in}
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\oddsidemargin}{-.19in}
+\setlength{\parindent}{1pc} % conform to IEEE format
+
+\begin{document}
+\title{\Large\bf Odin OS \\
+                 Jotun file format specification}
+\author{Stanislav Karchebny, \\
+        email: \texttt{berk@madfire.net}}
+\maketitle
+
+
+
+\section{Introduction}
+
+\par Jotun file format is intended to be as small as possible, while maintaining
+high scalability and portability. It is bound to features used in Odin OS -
+components, method tables etc.
+
+
+
+\section{History bits}
+
+
+
+\section{Format}
+
+\par Jotun file consists of two or more headers and some data.
+All fields in headers are little-endian.
+First header defines target architecture this file is intended to run on.
+It also defines a compatibility version information.
+
+
+\subsection{File Header}
+\label{sec:filehdr}
+
+\begin{center}
+\par File Header - mandatory
+\begin{tabular}{|l|l|l|l|}\hline
+\emph{off} & \emph{size} & \emph{name} & \emph{meaning/value} \\
+\hline\hline
+0      & dword    & magic      & `E',`T',`i',`N' (an english version for "Jotun") \\
+4*     & word     & hdrsize    & header size in bytes including magic and extra fields (min = 16) \\
+6      & word     & version    & Odin version this file is produced/compatible with \\
+8      & byte     & reserved   & padding, zero \\
+9      & byte     & machine    & machine architecture \\
+10**   & byte     & capacity   & file capacity (see below) \\
+11     & byte     & encoding   & file endianness (see below) \\
+12     & dword    & flags      & flags (see below) \\
+\hline
+\end{tabular}
+\end{center}
+
+\par File capacity
+\begin{description}
+\item[ 0 ] - undef
+\item[ 1 ] - 32 bits
+\item[ 2 ] - 64 bits
+\end{description}
+
+\par File endianness
+\begin{description}
+\item[ 0 ] - undef
+\item[ 1 ] - little-endian (Intel)
+\item[ 2 ] - big-endian (Motorola)
+\end{description}
+
+\par Flags
+\begin{description}
+\item[ bit 0: ] text info present
+\item[ bit 1: ] overlay data sections present
+\item[ bit 2: ] data section in Sections Header is unique (that is, component is singleton)
+\item[ other bits ] undefined
+\end{description}
+
+\par NOTES
+\begin{description}
+\item[ * ] two fields at offset 4 are read as single 4 bytes little-endian
+value with version in high word and header size in low word. Odin version
+is 4 bytes little-endian value with major.minor in high word and build in
+low word. So, to compare versions you just have to compare two high words.
+Header size usually remains constant within single version, so seeing unusual
+values means corrupted/wrong file.
+\item[ ** ] current document describes 32 bits Jotun files. 64 bits files are likely to
+have different sizes for many fields.
+\end{description}
+
+\par Following file header goes sections header: a comp-compatible list of
+component sections and their offsets/sizes. (see \ref{sec:secthdr})
+
+\par If File Header flags bit 0 is set, Sections Header is followed by Text Info,
+which has format of free-form key=value dictionary style. (see \ref{sec:textinfo})
+
+\par Then, if bit 1 in file header flags is set, follows overlay data sections header. (see \ref{sec:odshdr})
+
+\par Then sections in no particular order follows. The usual order however is
+text, data then method table.
+
+\par If bit 2 in file header flags is set, the data section should (but not have to) be
+instantiated in-place since this is "singleton" component - a component that can only
+have one single instance.
+
+
+\subsection{Sections Header}
+\label{sec:secthdr}
+
+\begin{center}
+\par Sections Header - mandatory
+\begin{tabular}{|l|l|l|l|}\hline
+\emph{off} & \emph{size} & \emph{name} & \emph{meaning} \\
+\hline\hline
+0      & dword    & sh\_size    & sections header size in bytes including this field (32 in this version) \\
+4      & dword    & t\_start    & start in file of text section \\
+8      & dword    & t\_size     & size in bytes of text section \\
+12     & dword    & d\_start    & start in file of data section \\
+16     & dword    & d\_size     & size in bytes of data section \\
+20     & dword    & b\_size     & size in bytes of bss section \\
+24     & dword    & m\_start    & start in file of method table section \\
+28     & dword    & m\_size     & size in bytes of method table section \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsection{Text Info}
+\label{sec:textinfo}
+
+\par \emph{Text Info - optional}
+
+\par Free-form file string info in form KEY=value, e.g.
+\par NAME=my\_funky\_comp\emph{binary 0}COPYRIGHT=2002 (c) johndoe\emph{binary 0}
+
+\par Standard defines some of KEY names for easy human/machine identification.
+Remember that key names are case sensitive! AUTHOR and Author are different!
+
+\begin{center}
+\par Key Names summary
+\begin{tabular}{|l|l|}\hline
+\emph{name} & \emph{meaning} \\
+\hline\hline
+NAME           & comp name (e.g. "my\_funky\_comp") \\
+FILENAME       & original comp file name (e.g. "my\_funky.comp") \\
+DESCRIPTION    & short textual description of what this comp is/does \\
+COPYRIGHT      & short copyright information (don't put COPYING file in here... \\
+               & "Copyright (c) YEAR, AUTHOR" will be more than enough) \\
+LICENSE        & license (something like "Distributed under BSD License" or "GPL") \\
+AUTHOR         & comp author name and email (e.g. "John Doe aka johndoe <jdoe@funny.info>") \\
+RELEASE        & file release version (e.g. "1.0.2.4") \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsection{Overlay Data Sections Header}
+\label{sec:odshdr}
+
+\begin{center}
+\par Overlay Data Sections Header - optional
+\begin{tabular}{|l|l|l|l|}\hline
+\emph{off} & \emph{size} & \emph{name} & \emph{meaning} \\
+\hline\hline
+0      & dword    & count      & number of overlay data sections in the header \\
+4      & dword    & start      & start address of ODS in memory \\
+8      & dword    & size       & size of ODS in memory \\
+       &          &            & the above two fields are repeated count times. \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Overlay data sections have no associated data. Instead, they are allocated "on-top" of the
+pre-existing memory arena, for example DMA buffer or a video framebuffer.
+
+
+\small
+
+%\bibliographystyle{plain}
+%\bibliography{odin}
+
+\end{document}

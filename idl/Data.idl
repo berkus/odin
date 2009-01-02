@@ -1,0 +1,16 @@
+/*
+ * Data interface represents low-level ORB's 'data' component type.
+ *
+ * Data components are passive in a way they contain only state, and no methods.
+ * Some methods defined in this interface are 'external' to the Data type, because
+ * they are implemented inside the ORB or in some other memory management component.
+ * This is completely transparent to the clients though.
+ */
+
+module ORB
+{
+   interface Data
+   {
+      void lock();
+   };
+};

@@ -1,0 +1,80 @@
+
+\documentclass[onecolumn]{article}
+\usepackage{graphicx}
+
+\begin{document}
+\title{\Large\bf Odin OS Object Request Broker interface and implementation}
+\author{Stanislav Karchebny, \\
+        email: \texttt{berk@madfire.net}}
+\maketitle
+
+\section{Introduction}
+\label{sec-intro}
+
+\par This document describes implementation of The ORB for Odin OS \cite{odin}.
+The ORB intention is to provide operating system componentization at lowest possible level.
+The ORB allows unification of components interoperation in both single-machine and inter-network
+execution environments. By using the ORB, components running even on different hardware platforms
+may interoperate easily.
+
+\section{Interface}
+\label{sec-if}
+
+\subsection{Interface IDL}
+\label{sec-if-idl}
+
+\small
+\begin{verbatim}
+interface orb
+{
+   privileged  void    ctor();           // constructor (!remove)
+   privileged  void    dtor();           // destructor  (!remove)
+
+	public      any     call();
+	public      any     fcall();
+	public      any     tcall();
+	public      void    xfer();
+	
+	privileged  comp    create(); //comp?objref?
+	privileged  void    destroy();
+	privileged  comp    install();//comp?objref?
+	privileged  void    uninstall();
+	privileged  objref  lock();
+	privileged  void    unlock(objref);
+	public      stack   get_stack();
+	privileged  objref  sel2ref();
+	public      comp    get_self();
+	public      comp    get_type();
+	privileged  void    set_type();
+	privileged  void    set_desc();
+	privileged  any     linear();
+	privileged  void    fault();
+	privileged  void    reject();
+	privileged  void    switch_stacks();
+	public      void    throw();
+	public      void    ret();
+	privileged  void    memory_map();
+};
+\end{verbatim}
+\normalsize
+
+\subsection{Interface methods description}
+\label{sec-if-desc}
+
+\small\begin{verbatim}void ctor();\end{verbatim}\normalsize
+
+\par The ORB constructor - main operating system entry point. The ORB
+constructor is called by boot loader. It performs all necessary system
+startup steps and boots off library OS.
+
+\small\begin{verbatim}void dtor();\end{verbatim}\normalsize
+
+\par The ORB destructor - called upon OS destruction, right after library OS
+returns from execution.
+
+\small
+
+\bibliographystyle{plain}
+\bibliography{odin}
+
+\end{document}

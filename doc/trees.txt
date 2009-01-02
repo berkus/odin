@@ -1,0 +1,164 @@
+BINARY TREE functions
+
+----------------------------------------------------------------------------------------
+bintree__insert_node
+
+ Insert node in ESI in the tree whose root pointer address is given in EDI.
+
+ NOTE: we use EDI for target node for the sake of copying
+       new node to old node if necessary.
+
+ input: --
+  ESI = new node
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  EBX, ESI trashed
+
+  CF = 0  node inserted
+  EAX = new node
+  EDI = parent node
+
+  CF = 1  node not inserted
+  EAX = new node
+  EDI = node with existing key (could be overwritten by new node data if necessary)
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+bintree__remove_node
+
+ Delete node with key in EBX from the tree whose root is given in EDI
+
+ input: --
+  EBX = key of node to delete
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  CF = 0  node deleted
+  ESI = unlinked node (can be freed or whatever)
+  EDI = new root node
+  EAX,EBX trashed
+
+  CF = 1  node not deleted (key not present)
+  ESI, EDI trashed
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+bintree__find_node
+
+ Look for node whose key is given in EBX in the tree whose
+ root pointer address is given in EDI.
+
+ input: --
+  EBX = key
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  CF = 0  node found
+  ESI = pointer to node pointer (in parent node)
+  EDI = node
+
+  CF = 1  node not found
+  ESI trashed
+  EDI = node candidate to insert new node at
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+
+TERNARY TREE functions
+
+----------------------------------------------------------------------------------------
+tertree__insert_node
+
+ Insert node in ESI in the tree whose root pointer address is given in EDI.
+
+ input: --
+  ESI = new node
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  EBX, ESI trashed
+
+  CF = 0  node inserted
+  EAX = new node
+  EDI = parent node
+
+  CF = 1  node not inserted
+  EAX = new node
+  EDI = node with existing key (could be overwritten by new node data if necessary)
+
+ NOTE: we use EDI for target node for the sake of copying
+       new node to old node if necessary.
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+tertree__remove_node
+
+ Delete node with key in EBX from the tree whose root is given in EDI
+
+ input: --
+  EBX = key of node to delete
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  CF = 0  node deleted
+  ESI = unlinked node (can be freed or whatever)
+  EDI = new root node
+  EAX,EBX trashed
+
+  CF = 1  node not deleted (key not present)
+  ESI, EDI trashed
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+tertree__find_node
+
+ Look for node whose key is given in EBX in the tree whose
+ root pointer address is given in EDI.
+
+ input: --
+  EBX = key
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  CF = 0  node found
+  ESI = pointer to node pointer (in parent node)
+  EDI = node
+
+  CF = 1  node not found
+  ESI trashed
+  EDI = node candidate to insert new node at
+
+  other registers unmodified
+
+----------------------------------------------------------------------------------------
+tertree__find_ae_node
+
+ Look for node whose key is equal to or greater than given in EBX
+ in the tree whose root pointer address is given in EDI.
+
+ input: --
+  EBX = key
+  EDI = pointer to root node pointer (e.g. node **edi = &root_ptr)
+
+ output: --
+  CF = 0  node found
+  ESI = pointer to node pointer (in parent node)
+  EDI = node
+
+  CF = 1  node not found
+  ESI trashed
+  EDI = node candidate
+  
+  
+  
+  
+  
+  
+  
+  

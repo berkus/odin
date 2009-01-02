@@ -1,0 +1,22 @@
+
+Defines that affect ORB behavior:
+
+__DEBUG            Makes a debug build with alot of extra checks made, recommended during
+                   development. I also suggest moving some of the _DEBUG branch features
+                   into release versions as well.
+
+__VERBOSE_STARTUP  Makes boot up process rather verbose. ORB prints various information
+                   about steps taken, components installed etc.. Very useful if you want
+                   to know a little about ORB internals, impress your linuxoid friend or
+                   find some nasty bug in the code. All supplement macros for such behavior
+                   are included in file debug.inc and are recommended for use by developers.
+
+__NO_CONSOLE_COMP  Disables internal ORB console component.
+
+
+Support for big (over 64K) stacks is decided to be primary. The support for small
+stacks have been refused and removed from source. The current support for big stacks is,
+however, partial because it doesn't grok page-gran stacks. Subject to FIXME.
+(However, in its current state stacks of up to 1Meg size are supported - should be pretty
+enough for most applications. If you encounter a problem with that (i.e. your program
+wants more stack space), submit a support request on our bug tracker).

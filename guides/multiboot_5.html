@@ -1,0 +1,908 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on February, 25  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>Multiboot Specification: Examples</TITLE>
+
+<META NAME="description" CONTENT="Multiboot Specification: Examples">
+<META NAME="keywords" CONTENT="Multiboot Specification: Examples">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Examples </H1>
+<!--docid::SEC14::-->
+<P>
+
+<STRONG>Caution:</STRONG> The following items are not part of the specification
+document, but are included for prospective operating system and boot
+loader writers.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC15">5.1 Notes on PC</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC16">5.2 BIOS device mapping techniques</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC19">5.3 Example OS code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC24">5.4 Example boot loader code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Notes on PC"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 Notes on PC </H2>
+<!--docid::SEC15::-->
+<P>
+
+In reference to bit 0 of the <SAMP>`flags'</SAMP> parameter in the Multiboot
+information structure, if the bootloader in question uses older
+BIOS interfaces, or the newest ones are not available (see
+description about bit 6), then a maximum of either 15 or 63 megabytes of
+memory may be reported. It is <EM>highly</EM> recommended that boot
+loaders perform a thorough memory probe.
+</P><P>
+
+In reference to bit 1 of the <SAMP>`flags'</SAMP> parameter in the Multiboot
+information structure, it is recognized that determination of which
+BIOS drive maps to which device driver in an operating system is
+non-trivial, at best. Many kludges have been made to various operating
+systems instead of solving this problem, most of them breaking under
+many conditions. To encourage the use of general-purpose solutions to
+this problem, there are 2 BIOS device mapping techniques
+(see section <A HREF="multiboot_5.html#SEC16">5.2 BIOS device mapping techniques</A>). 
+</P><P>
+
+In reference to bit 6 of the <SAMP>`flags'</SAMP> parameter in the Multiboot
+information structure, it is important to note that the data structure
+used there (starting with <SAMP>`BaseAddrLow'</SAMP>) is the data returned by
+the INT 15h, AX=E820h -- Query System Address Map call. See See section `Query System Address Map' in <CITE>The GRUB Manual</CITE>, for more information. The interface here is meant to allow a
+boot loader to work unmodified with any reasonable extensions of the
+BIOS interface, passing along any extra data to be interpreted by
+the operating system as desired.
+</P><P>
+
+<A NAME="BIOS device mapping techniques"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 BIOS device mapping techniques </H2>
+<!--docid::SEC16::-->
+<P>
+
+Both of these techniques should be usable from any PC operating system,
+and neither require any special support in the drivers themselves. This
+section will be flushed out into detailed explanations, particularly for
+the I/O restriction technique.
+</P><P>
+
+The general rule is that the data comparison technique is the quick and
+dirty solution. It works most of the time, but doesn't cover all the
+bases, and is relatively simple.
+</P><P>
+
+The I/O restriction technique is much more complex, but it has potential
+to solve the problem under all conditions, plus allow access of the
+remaining BIOS devices when not all of them have operating system
+drivers.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC17">5.2.1 Data comparison technique</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC18">5.2.2 I/O restriction technique</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Data comparison technique"></A>
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.2.1 Data comparison technique </H3>
+<!--docid::SEC17::-->
+<P>
+
+Before activating <EM>any</EM> of the device drivers, gather enough data
+from similar sectors on each of the disks such that each one can be
+uniquely identified.
+</P><P>
+
+After activating the device drivers, compare data from the drives using
+the operating system drivers. This should hopefully be sufficient to
+provide such a mapping.
+</P><P>
+
+Problems:
+</P><P>
+
+<OL>
+<LI>
+The data on some BIOS devices might be identical (so the part
+reading the drives from the BIOS should have some mechanism to give
+up).
+<P>
+
+<LI>
+There might be extra drives not accessible from the BIOS which are
+identical to some drive used by the BIOS (so it should be capable
+of giving up there as well).
+</OL>
+<P>
+
+<A NAME="I/O restriction technique"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.2.2 I/O restriction technique </H3>
+<!--docid::SEC18::-->
+<P>
+
+This first step may be unnecessary, but first create copy-on-write
+mappings for the device drivers writing into PC RAM. Keep the
+original copies for the <EM>clean BIOS virtual machine</EM> to be
+created later.
+</P><P>
+
+For each device driver brought online, determine which BIOS devices
+become inaccessible by:
+</P><P>
+
+<OL>
+<LI>
+Create a <EM>clean BIOS virtual machine</EM>.
+<P>
+
+<LI>
+Set the I/O permission map for the I/O area claimed by the device driver
+to no permissions (neither read nor write).
+<P>
+
+<LI>
+Access each device.
+<P>
+
+<LI>
+Record which devices succeed, and those which try to access the
+<EM>restricted</EM> I/O areas (hopefully, this will be an <EM>xor</EM>
+situation).
+</OL>
+<P>
+
+For each device driver, given how many of the BIOS devices were
+subsumed by it (there should be no gaps in this list), it should be easy
+to determine which devices on the controller these are.
+</P><P>
+
+In general, you have at most 2 disks from each controller given
+BIOS numbers, but they pretty much always count from the lowest
+logically numbered devices on the controller.
+</P><P>
+
+<A NAME="Example OS code"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Example OS code </H2>
+<!--docid::SEC19::-->
+<P>
+
+In this distribution, the example Multiboot kernel <TT>`kernel'</TT> is
+included. The kernel just prints out the Multiboot information structure
+on the screen, so you can make use of the kernel to test a
+Multiboot-compliant boot loader and for reference to how to implement a
+Multiboot kernel. The source files can be found under the directory
+<TT>`docs'</TT> in the GRUB distribution.
+</P><P>
+
+The kernel <TT>`kernel'</TT> consists of only three files: <TT>`boot.S'</TT>,
+<TT>`kernel.c'</TT> and <TT>`multiboot.h'</TT>. The assembly source
+<TT>`boot.S'</TT> is written in GAS (see section `GNU assembler' in <CITE>The GNU assembler</CITE>), and contains the Multiboot information structure to
+comply with the specification. When a Multiboot-compliant boot loader
+loads and execute it, it initialize the stack pointer and <CODE>EFLAGS</CODE>,
+and then call the function <CODE>cmain</CODE> defined in <TT>`kernel.c'</TT>. If
+<CODE>cmain</CODE> returns to the callee, then it shows a message to inform
+the user of the halt state and stops forever until you push the reset
+key. The file <TT>`kernel.c'</TT> contains the function <CODE>cmain</CODE>,
+which checks if the magic number passed by the boot loader is valid and
+so on, and some functions to print messages on the screen. The file
+<TT>`multiboot.h'</TT> defines some macros, such as the magic number for the
+Multiboot header, the Multiboot header structure and the Multiboot
+information structure.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC20">5.3.1 multiboot.h</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC21">5.3.2 boot.S</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC22">5.3.3 kernel.c</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_5.html#SEC23">5.3.4 Other Multiboot kernels</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="multiboot.h"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.3.1 multiboot.h </H3>
+<!--docid::SEC20::-->
+<P>
+
+This is the source code in the file <TT>`multiboot.h'</TT>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* multiboot.h - the header for Multiboot */
+/* Copyright (C) 1999  Free Software Foundation, Inc.
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
+
+/* Macros. */
+
+/* The magic number for the Multiboot header. */
+#define MULTIBOOT_HEADER_MAGIC          0x1BADB002
+
+/* The flags for the Multiboot header. */
+#define MULTIBOOT_HEADER_FLAGS          0x00010003
+
+/* The magic number passed by a Multiboot-compliant boot loader. */
+#define MULTIBOOT_BOOTLOADER_MAGIC      0x2BADB002
+
+/* The size of our stack (16KB). */
+#define STACK_SIZE                      0x4000
+
+/* C symbol format. HAVE_ASM_USCORE is defined by configure. */
+#ifdef HAVE_ASM_USCORE
+# define EXT_C(sym)                     _ ## sym
+#else
+# define EXT_C(sym)                     sym
+#endif
+
+#ifndef ASM
+/* Do not include here in boot.S. */
+
+/* Types. */
+
+/* The Multiboot header. */
+typedef struct multiboot_header
+{
+  unsigned long magic;
+  unsigned long flags;
+  unsigned long checksum;
+  unsigned long header_addr;
+  unsigned long load_addr;
+  unsigned long load_end_addr;
+  unsigned long bss_end_addr;
+  unsigned long entry_addr;
+} multiboot_header_t;
+
+/* The symbol table for a.out. */
+typedef struct aout_symbol_table
+{
+  unsigned long tabsize;
+  unsigned long strsize;
+  unsigned long addr;
+  unsigned long reserved;
+} aout_symbol_table_t;
+
+/* The section header table for ELF. */
+typedef struct elf_section_header_table
+{
+  unsigned long num;
+  unsigned long size;
+  unsigned long addr;
+  unsigned long shndx;
+} elf_section_header_table_t;
+
+/* The Multiboot information. */
+typedef struct multiboot_info
+{
+  unsigned long flags;
+  unsigned long mem_lower;
+  unsigned long mem_upper;
+  unsigned long boot_device;
+  unsigned long cmdline;
+  unsigned long mods_count;
+  unsigned long mods_addr;
+  union
+  {
+    aout_symbol_table_t aout_sym;
+    elf_section_header_table_t elf_sec;
+  } u;
+  unsigned long mmap_length;
+  unsigned long mmap_addr;
+} multiboot_info_t;
+
+/* The module structure. */
+typedef struct module
+{
+  unsigned long mod_start;
+  unsigned long mod_end;
+  unsigned long string;
+  unsigned long reserved;
+} module_t;
+
+/* The memory map. Be careful that the offset 0 is base_addr_low
+   but no size. */
+typedef struct memory_map
+{
+  unsigned long size;
+  unsigned long base_addr_low;
+  unsigned long base_addr_high;
+  unsigned long length_low;
+  unsigned long length_high;
+  unsigned long type;
+} memory_map_t;
+
+#endif /* ! ASM */
+</pre></td></tr></table></P><P>
+
+<A NAME="boot.S"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.3.2 boot.S </H3>
+<!--docid::SEC21::-->
+<P>
+
+In the file <TT>`boot.S'</TT>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* boot.S - bootstrap the kernel */
+/* Copyright (C) 1999  Free Software Foundation, Inc.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+ 
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
+
+#define ASM     1
+#include &#60;multiboot.h&#62;
+        
+        .text
+
+        .globl  start, _start
+
+        /* This entry is not used actually. */
+start:
+_start:
+        jmp     multiboot_entry
+
+        /* Align 32 bits boundary. */
+        .align  4
+        
+        /* Multiboot header. */
+multiboot_header:
+        /* magic */
+        .long   MULTIBOOT_HEADER_MAGIC
+        /* flags */
+        .long   MULTIBOOT_HEADER_FLAGS
+        /* checksum */
+        .long   -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+        /* header_addr */
+        .long   multiboot_header
+        /* load_addr */
+        .long   _start
+        /* load_end_addr */
+        .long   _edata
+        /* bss_end_addr */
+        .long   _end
+        /* entry_addr */
+        .long   multiboot_entry
+
+multiboot_entry:
+        /* Initialize the stack pointer. */
+        movl    $(stack + STACK_SIZE), %esp
+
+        /* Reset EFLAGS. */
+        pushl   $0
+        popf
+
+        /* Push the pointer to the Multiboot information structure. */
+        pushl   %ebx
+        /* Push the magic value. */
+        pushl   %eax
+
+        /* Now enter the C main function... */
+        call    EXT_C(cmain)
+
+        /* Halt. */
+        pushl   $halt_message
+        call    EXT_C(printf)
+        
+loop:   hlt
+        jmp     loop
+
+halt_message:
+        .asciz  "Halted."
+
+        /* Our stack area. */
+        .comm   stack, STACK_SIZE
+        </pre></td></tr></table></P><P>
+
+<A NAME="kernel.c"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.3.3 kernel.c </H3>
+<!--docid::SEC22::-->
+<P>
+
+And, in the file <TT>`kernel.c'</TT>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* kernel.c - the C part of the kernel */
+/* Copyright (C) 1999  Free Software Foundation, Inc.
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
+
+#include &#60;multiboot.h&#62;
+
+/* Macros. */
+
+/* Check if the bit BIT in FLAGS is set. */
+#define CHECK_FLAG(flags,bit)   ((flags) &#38; (1 &#60;&#60; (bit)))
+
+/* Some screen stuff. */
+/* The number of columns. */
+#define COLUMNS                 80
+/* The number of lines. */
+#define LINES                   24
+/* The attribute of an character. */
+#define ATTRIBUTE               7
+/* The video memory address. */
+#define VIDEO                   0xB8000
+
+/* Variables. */
+/* Save the X position. */
+static int xpos;
+/* Save the Y position. */
+static int ypos;
+/* Point to the video memory. */
+static volatile unsigned char *video;
+
+/* Forward declarations. */
+void cmain (unsigned long magic, unsigned long addr);
+static void cls (void);
+static void itoa (char *buf, int base, int d);
+static void putchar (int c);
+void printf (const char *format, ...);
+
+/* Check if MAGIC is valid and print the Multiboot information structure
+   pointed by ADDR. */
+void
+cmain (unsigned long magic, unsigned long addr)
+{
+  multiboot_info_t *mbi;
+  
+  /* Clear the screen. */
+  cls ();
+
+  /* Am I booted by a Multiboot-compliant boot loader? */
+  if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
+    {
+      printf ("Invalid magic number: 0x%x\n", magic);
+      return;
+    }
+
+  /* Set MBI to the address of the Multiboot information structure. */
+  mbi = (multiboot_info_t *) addr;
+
+  /* Print out the flags. */
+  printf ("flags = 0x%x\n", mbi-&#62;flags);
+
+  /* Are mem_* valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 0))
+    printf ("mem_lower = %dKB, mem_upper = %dKB\n",
+            mbi-&#62;mem_lower, mbi-&#62;mem_upper);
+
+  /* Is boot_device valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 1))
+    printf ("boot_device = 0x%x\n", mbi-&#62;boot_device);
+  
+  /* Is the command line passed? */
+  if (CHECK_FLAG (mbi-&#62;flags, 2))
+    printf ("cmdline = %s\n", (char *) mbi-&#62;cmdline);
+
+  /* Are mods_* valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 3))
+    {
+      module_t *mod;
+      int i;
+      
+      printf ("mods_count = %d, mods_addr = 0x%x\n",
+              mbi-&#62;mods_count, mbi-&#62;mods_addr);
+      for (i = 0, mod = (module_t *) mbi-&#62;mods_addr;
+           i &#60; mbi-&#62;mods_count;
+           i++, mod += sizeof (module_t))
+        printf (" mod_start = 0x%x, mod_end = 0x%x, string = %s\n",
+                mod-&#62;mod_start, mod-&#62;mod_end, (char *) mod-&#62;string);
+    }
+
+  /* Bits 4 and 5 are mutually exclusive! */
+  if (CHECK_FLAG (mbi-&#62;flags, 4) &#38;&#38; CHECK_FLAG (mbi-&#62;flags, 5))
+    {
+      printf ("Both bits 4 and 5 are set.\n");
+      return;
+    }
+
+  /* Is the symbol table of a.out valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 4))
+    {
+      aout_symbol_table_t *aout_sym = &#38;(mbi-&#62;u.aout_sym);
+      
+      printf ("aout_symbol_table: tabsize = 0x%0x, "
+              "strsize = 0x%x, addr = 0x%x\n",
+              aout_sym-&#62;tabsize, aout_sym-&#62;strsize, aout_sym-&#62;addr);
+    }
+
+  /* Is the section header table of ELF valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 5))
+    {
+      elf_section_header_table_t *elf_sec = &#38;(mbi-&#62;u.elf_sec);
+
+      printf ("elf_sec: num = %d, size = 0x%x,"
+              " addr = 0x%x, shndx = 0x%x\n",
+              elf_sec-&#62;num, elf_sec-&#62;size,
+              elf_sec-&#62;addr, elf_sec-&#62;shndx);
+    }
+
+  /* Are mmap_* valid? */
+  if (CHECK_FLAG (mbi-&#62;flags, 6))
+    {
+      memory_map_t *mmap;
+      
+      printf ("mmap_addr = 0x%x, mmap_length = 0x%x\n",
+              mbi-&#62;mmap_addr, mbi-&#62;mmap_length);
+      for (mmap = (memory_map_t *) mbi-&#62;mmap_addr;
+           (unsigned long) mmap &#60; mbi-&#62;mmap_addr + mbi-&#62;mmap_length;
+           mmap = (memory_map_t *) ((unsigned long) mmap
+                                    + mmap-&#62;size + sizeof (mmap-&#62;size)))
+        printf (" size = 0x%x, base_addr = 0x%x%x,"
+                " length = 0x%x%x, type = 0x%x\n",
+                mmap-&#62;size, mmap-&#62;base_addr_high, mmap-&#62;base_addr_low,
+                mmap-&#62;length_high, mmap-&#62;length_low, mmap-&#62;type);
+    }
+}    
+
+/* Clear the screen and initialize VIDEO, XPOS and YPOS. */
+static void
+cls (void)
+{
+  int i;
+
+  video = (unsigned char *) VIDEO;
+  
+  for (i = 0; i &#60; COLUMNS * LINES * 2; i++)
+    *(video + i) = 0;
+
+  xpos = 0;
+  ypos = 0;
+}
+
+/* Convert the integer D to a string and save the string in BUF. If
+   BASE is equal to 'd', interpret that D is decimal, and if BASE is
+   equal to 'x', interpret that D is hexadecimal. */
+static void
+itoa (char *buf, int base, int d)
+{
+  char *p = buf;
+  char *p1, *p2;
+  unsigned long ud = d;
+  int divisor = 10;
+  
+  /* If %d is specified and D is minus, put `-' in the head. */
+  if (base == 'd' &#38;&#38; d &#60; 0)
+    {
+      *p++ = '-';
+      buf++;
+      ud = -d;
+    }
+  else if (base == 'x')
+    divisor = 16;
+
+  /* Divide UD by DIVISOR until UD == 0. */
+  do
+    {
+      int remainder = ud % divisor;
+      
+      *p++ = (remainder &#60; 10) ? remainder + '0' : remainder + 'a' - 10;
+    }
+  while (ud /= divisor);
+
+  /* Terminate BUF. */
+  *p = 0;
+  
+  /* Reverse BUF. */
+  p1 = buf;
+  p2 = p - 1;
+  while (p1 &#60; p2)
+    {
+      char tmp = *p1;
+      *p1 = *p2;
+      *p2 = tmp;
+      p1++;
+      p2--;
+    }
+}
+
+/* Put the character C on the screen. */
+static void
+putchar (int c)
+{
+  if (c == '\n' || c == '\r')
+    {
+    newline:
+      xpos = 0;
+      ypos++;
+      if (ypos &#62;= LINES)
+        ypos = 0;
+      return;
+    }
+
+  *(video + (xpos + ypos * COLUMNS) * 2) = c &#38; 0xFF;
+  *(video + (xpos + ypos * COLUMNS) * 2 + 1) = ATTRIBUTE;
+
+  xpos++;
+  if (xpos &#62;= COLUMNS)
+    goto newline;
+}
+
+/* Format a string and print it on the screen, just like the libc
+   function printf. */
+void
+printf (const char *format, ...)
+{
+  char **arg = (char **) &#38;format;
+  int c;
+  char buf[20];
+
+  arg++;
+  
+  while ((c = *format++) != 0)
+    {
+      if (c != '%')
+        putchar (c);
+      else
+        {
+          char *p;
+          
+          c = *format++;
+          switch (c)
+            {
+            case 'd':
+            case 'u':
+            case 'x':
+              itoa (buf, c, *((int *) arg++));
+              p = buf;
+              goto string;
+              break;
+
+            case 's':
+              p = *arg++;
+              if (! p)
+                p = "(null)";
+
+            string:
+              while (*p)
+                putchar (*p++);
+              break;
+
+            default:
+              putchar (*((int *) arg++));
+              break;
+            }
+        }
+    }
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Other Multiboot kernels"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC19"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 5.3.4 Other Multiboot kernels </H3>
+<!--docid::SEC23::-->
+<P>
+
+Other useful information should be available in Multiboot kernels, such
+as GNU Mach and Fiasco <A HREF="http://os.inf.tu-dresden.de/fiasco/">http://os.inf.tu-dresden.de/fiasco/</A>. And,
+it is worth mentioning the OSKit
+<A HREF="http://www.cs.utah.edu/projects/flux/oskit/">http://www.cs.utah.edu/projects/flux/oskit/</A>, which provides a
+library supporting the specification.
+</P><P>
+
+<A NAME="Example boot loader code"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Example boot loader code </H2>
+<!--docid::SEC24::-->
+<P>
+
+The GNU GRUB (see section `GRUB' in <CITE>The GRUB manual</CITE>) project
+is a full Multiboot-compliant boot loader, supporting all required and
+optional features present in this specification. A public release has
+not been made, but the test release is available from:
+</P><P>
+
+<A HREF="ftp://alpha.gnu.org/gnu/hurd/src/">ftp://alpha.gnu.org/gnu/hurd/src/</A>
+</P><P>
+
+See the webpage <A HREF="http://www.gnu.org/software/grub/grub.html">http://www.gnu.org/software/grub/grub.html</A>, for
+more information.
+</P><P>
+
+<A NAME="Index"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>root</I> on <I>February, 25  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

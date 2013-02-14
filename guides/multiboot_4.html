@@ -1,0 +1,711 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on February, 25  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>Multiboot Specification: Details</TITLE>
+
+<META NAME="description" CONTENT="Multiboot Specification: Details">
+<META NAME="keywords" CONTENT="Multiboot Specification: Details">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_3.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Details </H1>
+<!--docid::SEC10::-->
+<P>
+
+There are three main aspects of the boot loader/OS image interface:
+</P><P>
+
+<OL>
+<LI>
+The format of the OS image as seen by the boot loader.
+<P>
+
+<LI>
+The state of the machine when the boot loader starts the operating
+system.
+<P>
+
+<LI>
+The format of the information passed by the boot loader to the operating
+system.
+</OL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_4.html#SEC11">4.1 OS image format</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_4.html#SEC12">4.2 Machine state</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="multiboot_4.html#SEC13">4.3 Boot information format</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="OS image format"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 OS image format </H2>
+<!--docid::SEC11::-->
+<P>
+
+An OS image is generally just an ordinary 32-bit executable file in the
+standard format for that particular operating system, except that it may
+be linked at a non-default load address to avoid loading on top of the
+PC's I/O region or other reserved areas, and of course it can't use
+shared libraries or other fancy features.
+</P><P>
+
+Unfortunately, the exact meaning of the text, data, bss, and entry
+fields of a.out headers tends to vary widely between different
+executable flavors, and it is sometimes very difficult to distinguish
+one flavor from another (e.g. Linux ZMAGIC executables and Mach
+ZMAGIC executables). Furthermore, there is no simple, reliable way
+of determining at what address in memory the text segment is supposed to
+start. Therefore, this specification requires that an additional header,
+known as a <EM>Multiboot header</EM>, appear somewhere near the beginning
+of the executable file. In general it should come <EM>as early as
+possible</EM>, and is typically embedded in the beginning of the text
+segment after the <EM>real</EM> executable header. It <EM>must</EM> be
+contained completely within the first 8192 bytes of the executable file,
+and must be longword (32-bit) aligned. These rules allow the boot loader
+to find and synchronize with the text segment in the a.out file without
+knowing beforehand the details of the a.out variant. The layout of the
+header is as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+0       | magic: 0x1BADB002 |   (required)
+4       | flags             |   (required)
+8       | checksum          |   (required)
+        +-------------------+
+12      | header_addr       |   (present if flags[16] is set)
+16      | load_addr         |   (present if flags[16] is set)
+20      | load_end_addr     |   (present if flags[16] is set)
+24      | bss_end_addr      |   (present if flags[16] is set)
+28      | entry_addr        |   (present if flags[16] is set)
+        +-------------------+
+32      | mode_type         |   (present if flags[2] is set)
+36      | width             |   (present if flags[2] is set)
+40      | height            |   (present if flags[2] is set)
+44      | depth             |   (present if flags[2] is set)
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+All fields are in little-endian byte order, of course. The first field
+is the magic number identifying the header, which must be the hex value
+0x1BADB002.
+</P><P>
+
+The <SAMP>`flags'</SAMP> field specifies features that the OS image requests or
+requires of the boot loader. Bits 0-15 indicate requirements; if the
+boot loader sees any of these bits set but doesn't understand the flag
+or can't fulfill the requirements it indicates for some reason, it must
+notify the user and fail to load the OS image. Bits 16-31 indicate
+optional features; if any bits in this range are set but the boot loader
+doesn't understand them, it can simply ignore them and proceed as
+usual. Naturally, all as-yet-undefined bits in the <SAMP>`flags'</SAMP> word
+must be set to zero in OS images. This way, the <SAMP>`flags'</SAMP> fields
+serves for version control as well as simple feature selection.
+</P><P>
+
+If bit 0 in the <SAMP>`flags'</SAMP> word is set, then all boot modules loaded
+along with the operating system must be aligned on page (4KB)
+boundaries. Some operating systems expect to be able to map the pages
+containing boot modules directly into a paged address space during
+startup, and thus need the boot modules to be page-aligned.
+</P><P>
+
+If bit 1 in the <SAMP>`flags'</SAMP> word is set, then information on available
+memory via at least the <SAMP>`mem_*'</SAMP> fields of the Multiboot information
+structure (see section <A HREF="multiboot_4.html#SEC13">4.3 Boot information format</A>) must be included. If the
+bootloader is capable of passing a memory map (the <SAMP>`mmap_*'</SAMP> fields)
+and one exists, then it must be included as well.
+</P><P>
+
+If bit 2 in the <SAMP>`flags'</SAMP> word is set, information about the video
+mode table, defined later, must be available to the kernel.
+</P><P>
+
+Also, information about a preferred default mode can be specified in the
+<SAMP>`mode_type'</SAMP>, <SAMP>`width'</SAMP>, <SAMP>`height'</SAMP> and <SAMP>`depth'</SAMP>
+fields. This is only a <EM>recommended</EM> mode by the kernel. If the
+mode exists, the boot loader should set it if the user hasn't specified
+a mode. If not, it should fall back to a similar mode, if available.
+</P><P>
+
+Valid numbers for <SAMP>`mode_type'</SAMP> is 0 for linear graphics mode and 1
+for EGA-standard text mode. Everything else is reserved for future
+expansion. Please note that even if you set this field to indicate that
+you want a graphics mode, you might get a text mode.
+</P><P>
+
+<SAMP>`width'</SAMP> and <SAMP>`height'</SAMP> is specified in pixels, if graphics mode,
+or characters in EGA text mode. <SAMP>`depth'</SAMP> is given in bits per pixel
+for graphics, or zero for EGA text modes.
+</P><P>
+
+Any, some or all of those three fields may be set to zero, indicating to
+the boot loader that no preference is given. This makes it possible for
+a kernel to just say it wants a 32-bit resolution, for example.
+</P><P>
+
+If bit 16 in the <SAMP>`flags'</SAMP> word is set, then the fields at offsets
+8-24 in the Multiboot header are valid, and the boot loader should use
+them instead of the fields in the actual executable header to calculate
+where to load the OS image. This information does not need to be
+provided if the kernel image is in ELF format, but it <EM>must</EM>
+be provided if the images is in a.out format or in some other
+format. Compliant boot loaders must be able to load images that either
+are in ELF format or contain the load address information embedded
+in the Multiboot header; they may also directly support other executable
+formats, such as particular a.out variants, but are not required to.
+</P><P>
+
+All of the address fields enabled by flag bit 16 are physical addresses.
+The meaning of each is as follows:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>header_addr</CODE>
+<DD>Contains the address corresponding to the beginning of the Multiboot
+header -- the physical memory location at which the magic value is
+supposed to be loaded. This field serves to <EM>synchronize</EM> the
+mapping between OS image offsets and physical memory addresses.
+<P>
+
+<DT><CODE>load_addr</CODE>
+<DD>Contains the physical address of the beginning of the text segment. The
+offset in the OS image file at which to start loading is defined by the
+offset at which the header was found, minus (header_addr -
+load_addr). load_addr must be less than or equal to header_addr.
+<P>
+
+<DT><CODE>load_end_addr</CODE>
+<DD>Contains the physical address of the end of the data
+segment. (load_end_addr - load_addr) specifies how much data to load.
+This implies that the text and data segments must be consecutive in the
+OS image; this is true for existing a.out executable formats.
+<P>
+
+<DT><CODE>bss_end_addr</CODE>
+<DD>Contains the physical address of the end of the bss segment. The boot
+loader initializes this area to zero, and reserves the memory it
+occupies to avoid placing boot modules and other data relevant to the
+operating system in that area.
+<P>
+
+<DT><CODE>entry_addr</CODE>
+<DD>The physical address to which the boot loader should jump in order to
+start running the operating system.
+</DL>
+<P>
+
+The checksum is a 32-bit unsigned value which, when added to
+the other required fields, must have a 32-bit unsigned sum of zero.
+</P><P>
+
+<A NAME="Machine state"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Machine state </H2>
+<!--docid::SEC12::-->
+<P>
+
+When the boot loader invokes the 32-bit operating system, the machine
+must have the following state:
+</P><P>
+
+<UL>
+<LI>
+<CODE>CS</CODE> must be a 32-bit read/execute code segment with an offset of 0
+and a limit of 0xFFFFFFFF.
+<P>
+
+<LI>
+<CODE>DS</CODE>, <CODE>ES</CODE>, <CODE>FS</CODE>, <CODE>GS</CODE>, and <CODE>SS</CODE> must be a
+32-bit read/write data segment with an offset of 0 and a limit of
+0xFFFFFFFF.
+<P>
+
+<LI>
+The address 20 line must be usable for standard linear 32-bit addressing
+of memory (in standard PC hardware, it is wired to 0 at bootup,
+forcing addresses in the 1-2 MB range to be mapped to the 0-1 MB range,
+3-4 is mapped to 2-3, etc.).
+<P>
+
+<LI>
+Paging must be turned off.
+<P>
+
+<LI>
+The processor interrupt flag must be turned off.
+<P>
+
+<LI>
+<CODE>EAX</CODE> must contain the magic value 0x2BADB002; the presence of this
+value indicates to the operating system that it was loaded by a
+Multiboot-compliant boot loader (e.g. as opposed to another type of boot
+loader that the operating system can also be loaded from).
+<P>
+
+<LI>
+<CODE>EBX</CODE> must contain the 32-bit physical address of the Multiboot
+information structure provided by the boot loader (see section <A HREF="multiboot_4.html#SEC13">4.3 Boot information format</A>).
+</UL>
+<P>
+
+All other processor registers and flag bits are undefined. This
+includes, in particular:
+</P><P>
+
+<UL>
+<LI>
+<CODE>ESP</CODE>: the 32-bit operating system must create its own stack as
+soon as it needs one.
+<P>
+
+<LI>
+<CODE>GDTR</CODE>: Even though the segment registers are set up as described
+above, the <CODE>GDTR</CODE> may be invalid, so the operating system must not
+load any segment registers (even just reloading the same values!) until
+it sets up its own <CODE>GDT</CODE>.
+<P>
+
+<LI>
+<CODE>IDTR</CODE>: The operating system must leave interrupts disabled until
+it sets up its own <CODE>IDT</CODE>.
+</UL>
+<P>
+
+However, other machine state should be left by the boot loader in
+<EM>normal working order</EM>, i.e. as initialized by the BIOS (or
+DOS, if that's what the boot loader runs from). In other words, the
+operating system should be able to make BIOS calls and such after
+being loaded, as long as it does not overwrite the BIOS data
+structures before doing so. Also, the boot loader must leave the
+PIC programmed with the normal BIOS/DOS values, even if it
+changed them during the switch to 32-bit mode.
+</P><P>
+
+<A NAME="Boot information format"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Boot information format </H2>
+<!--docid::SEC13::-->
+<P>
+
+Upon entry to the operating system, the <CODE>EBX</CODE> register contains the
+physical address of a <EM>Multiboot information</EM> data structure,
+through which the boot loader communicates vital information to the
+operating system. The operating system can use or ignore any parts of
+the structure as it chooses; all information passed by the boot loader
+is advisory only.
+</P><P>
+
+The Multiboot information structure and its related substructures may be
+placed anywhere in memory by the boot loader (with the exception of the
+memory reserved for the kernel and boot modules, of course). It is the
+operating system's responsibility to avoid overwriting this memory until
+it is done using it.
+</P><P>
+
+The format of the Multiboot information structure (as defined so far)
+follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+0       | flags             |    (required)
+        +-------------------+
+4       | mem_lower         |    (present if flags[0] is set)
+8       | mem_upper         |    (present if flags[0] is set)
+        +-------------------+
+12      | boot_device       |    (present if flags[1] is set)
+        +-------------------+
+16      | cmdline           |    (present if flags[2] is set)
+        +-------------------+
+20      | mods_count        |    (present if flags[3] is set)
+24      | mods_addr         |    (present if flags[3] is set)
+        +-------------------+
+28 - 40 | syms              |    (present if flags[4] or
+        |                   |                flags[5] is set)
+        +-------------------+
+44      | mmap_length       |    (present if flags[6] is set)
+48      | mmap_addr         |    (present if flags[6] is set)
+        +-------------------+
+52      | drives_count      |    (present if flags[7] is set)
+56      | drives_addr       |    (present if flags[7] is set)
+        +-------------------+
+60      | config_table      |    (present if flags[8] is set)
+        +-------------------+
+64      | boot_loader_name  |    (present if flags[9] is set)
+        +-------------------+
+68 - ?? | apm_table         |    (present if flags[10] is set)
+        +-------------------+
+?? - ?? | graphics_table    |    (present if flags[11] is set)
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+The first longword indicates the presence and validity of other fields
+in the Multiboot information structure. All as-yet-undefined bits must
+be set to zero by the boot loader. Any set bits that the operating
+system does not understand should be ignored. Thus, the <SAMP>`flags'</SAMP>
+field also functions as a version indicator, allowing the Multiboot
+information structure to be expanded in the future without breaking
+anything.
+</P><P>
+
+If bit 0 in the <SAMP>`flags'</SAMP> word is set, then the <SAMP>`mem_*'</SAMP> fields
+are valid. <SAMP>`mem_lower'</SAMP> and <SAMP>`mem_upper'</SAMP> indicate the amount of
+lower and upper memory, respectively, in kilobytes. Lower memory starts
+at address 0, and upper memory starts at address 1 megabyte. The maximum
+possible value for lower memory is 640 kilobytes. The value returned for
+upper memory is maximally the address of the first upper memory hole
+minus 1 megabyte. It is not guaranteed to be this value.
+</P><P>
+
+If bit 1 in the <SAMP>`flags'</SAMP> word is set, then the <SAMP>`boot_device'</SAMP>
+field is valid, and indicates which BIOS disk device the boot
+loader loaded the OS image from. If the OS image was not loaded from a
+BIOS disk, then this field must not be present (bit 3 must be
+clear). The operating system may use this field as a hint for
+determining its own <EM>root</EM> device, but is not required to. The
+<SAMP>`boot_device'</SAMP> field is laid out in four one-byte subfields as
+follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+-------+-------+-------+-------+
+| drive | part1 | part2 | part3 |
++-------+-------+-------+-------+
+</pre></td></tr></table></P><P>
+
+The first byte contains the BIOS drive number as understood by the
+BIOS INT 0x13 low-level disk interface: e.g. 0x00 for the first
+floppy disk or 0x80 for the first hard disk.
+</P><P>
+
+The three remaining bytes specify the boot partition. <SAMP>`part1'</SAMP>
+specifies the <EM>top-level</EM> partition number, <SAMP>`part2'</SAMP> specifies a
+<EM>sub-partition</EM> in the top-level partition, etc. Partition numbers
+always start from zero. Unused partition bytes must be set to 0xFF. For
+example, if the disk is partitioned using a simple one-level DOS
+partitioning scheme, then <SAMP>`part1'</SAMP> contains the DOS partition
+number, and <SAMP>`part2'</SAMP> and <SAMP>`part3'</SAMP> are both 0xFF. As another
+example, if a disk is partitioned first into DOS partitions, and then
+one of those DOS partitions is subdivided into several BSD partitions
+using BSD's <EM>disklabel</EM> strategy, then <SAMP>`part1'</SAMP> contains the DOS
+partition number, <SAMP>`part2'</SAMP> contains the BSD sub-partition within
+that DOS partition, and <SAMP>`part3'</SAMP> is 0xFF.
+</P><P>
+
+DOS extended partitions are indicated as partition numbers starting from
+4 and increasing, rather than as nested sub-partitions, even though the
+underlying disk layout of extended partitions is hierarchical in
+nature. For example, if the boot loader boots from the second extended
+partition on a disk partitioned in conventional DOS style, then
+<SAMP>`part1'</SAMP> will be 5, and <SAMP>`part2'</SAMP> and <SAMP>`part3'</SAMP> will both be
+0xFF.
+</P><P>
+
+If bit 2 of the <SAMP>`flags'</SAMP> longword is set, the <SAMP>`cmdline'</SAMP> field
+is valid, and contains the physical address of the command line to
+be passed to the kernel. The command line is a normal C-style
+zero-terminated string.
+</P><P>
+
+If bit 3 of the <SAMP>`flags'</SAMP> is set, then the <SAMP>`mods'</SAMP> fields
+indicate to the kernel what boot modules were loaded along with the
+kernel image, and where they can be found. <SAMP>`mods_count'</SAMP> contains
+the number of modules loaded; <SAMP>`mods_addr'</SAMP> contains the physical
+address of the first module structure. <SAMP>`mods_count'</SAMP> may be zero,
+indicating no boot modules were loaded, even if bit 1 of <SAMP>`flags'</SAMP> is
+set. Each module structure is formatted as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+0       | mod_start         |
+4       | mod_end           |
+        +-------------------+
+8       | string            |
+        +-------------------+
+12      | reserved (0)      |
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+The first two fields contain the start and end addresses of the boot
+module itself. The <SAMP>`string'</SAMP> field provides an arbitrary string to
+be associated with that particular boot module; it is a zero-terminated
+ASCII string, just like the kernel command line. The <SAMP>`string'</SAMP> field
+may be 0 if there is no string associated with the module. Typically the
+string might be a command line (e.g. if the operating system treats boot
+modules as executable programs), or a pathname (e.g. if the operating
+system treats boot modules as files in a file system), but its exact use
+is specific to the operating system. The <SAMP>`reserved'</SAMP> field must be
+set to 0 by the boot loader and ignored by the operating system.
+</P><P>
+
+<STRONG>Caution:</STRONG> Bits 4 &#38; 5 are mutually exclusive.
+</P><P>
+
+If bit 4 in the <SAMP>`flags'</SAMP> word is set, then the following fields in
+the Multiboot information structure starting at byte 28 are valid:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+28      | tabsize           |
+32      | strsize           |
+36      | addr              |
+40      | reserved (0)      |
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+These indicate where the symbol table from an a.out kernel image can be
+found. <SAMP>`addr'</SAMP> is the physical address of the size (4-byte unsigned
+long) of an array of a.out format <EM>nlist</EM> structures, followed
+immediately by the array itself, then the size (4-byte unsigned long) of
+a set of zero-terminated ASCII strings (plus sizeof(unsigned long) in
+this case), and finally the set of strings itself. <SAMP>`tabsize'</SAMP> is
+equal to its size parameter (found at the beginning of the symbol
+section), and <SAMP>`strsize'</SAMP> is equal to its size parameter (found at
+the beginning of the string section) of the following string table to
+which the symbol table refers. Note that <SAMP>`tabsize'</SAMP> may be 0,
+indicating no symbols, even if bit 4 in the <SAMP>`flags'</SAMP> word is set.
+</P><P>
+
+If bit 5 in the <SAMP>`flags'</SAMP> word is set, then the following fields in
+the Multiboot information structure starting at byte 28 are valid:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+28      | num               |
+32      | size              |
+36      | addr              |
+40      | shndx             |
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+These indicate where the section header table from an ELF kernel is, the
+size of each entry, number of entries, and the string table used as the
+index of names. They correspond to the <SAMP>`shdr_*'</SAMP> entries
+(<SAMP>`shdr_num'</SAMP>, etc.) in the Executable and Linkable Format (ELF)
+specification in the program header. All sections are loaded, and the
+physical address fields of the ELF section header then refer to where
+the sections are in memory (refer to the i386 ELF documentation for
+details as to how to read the section header(s)). Note that
+<SAMP>`shdr_num'</SAMP> may be 0, indicating no symbols, even if bit 5 in the
+<SAMP>`flags'</SAMP> word is set.
+</P><P>
+
+If bit 6 in the <SAMP>`flags'</SAMP> word is set, then the <SAMP>`mmap_*'</SAMP> fields
+are valid, and indicate the address and length of a buffer containing a
+memory map of the machine provided by the BIOS. <SAMP>`mmap_addr'</SAMP> is
+the address, and <SAMP>`mmap_length'</SAMP> is the total size of the buffer. The
+buffer consists of one or more of the following size/structure pairs
+(<SAMP>`size'</SAMP> is really used for skipping to the next pair):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+-4      | size              |
+        +-------------------+
+0       | base_addr_low     |
+4       | base_addr_high    |
+8       | length_low        |
+12      | length_high       |
+16      | type              |
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+where <SAMP>`size'</SAMP> is the size of the associated structure in bytes, which
+can be greater than the minimum of 20 bytes. <SAMP>`base_addr_low'</SAMP> is the
+lower 32 bits of the starting address, and <SAMP>`base_addr_high'</SAMP> is the
+upper 32 bits, for a total of a 64-bit starting address. <SAMP>`length_low'</SAMP>
+is the lower 32 bits of the size of the memory region in bytes, and
+<SAMP>`length_high'</SAMP> is the upper 32 bits, for a total of a 64-bit
+length. <SAMP>`type'</SAMP> is the variety of address range represented, where a
+value of 1 indicates available RAM, and all other values currently
+indicated a reserved area.
+</P><P>
+
+The map provided is guaranteed to list all standard RAM that should
+be available for normal use.
+</P><P>
+
+If bit 7 in the <SAMP>`flags'</SAMP> is set, then the <SAMP>`drives_*'</SAMP> fields
+are valid, and indicate the address of the physical address of the first
+drive structure and the number of drive structures. <SAMP>`drives_addr'</SAMP>
+is the address, and <SAMP>`drives_count'</SAMP> is the
+number. <SAMP>`drives_count'</SAMP> may be zero. Each drive structure is
+formatted as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>        +-------------------+
+0       | drive_number      |
+        +-------------------+
+1       | drive_mode        |
+        +-------------------+
+2       | drive_cylinders   |
+4       | drive_heads       |
+5       | drive_sectors     |
+        +-------------------+
+6       | drive_ports       |
+        +-------------------+
+10      | reserved (0)      |
+        +-------------------+
+</pre></td></tr></table></P><P>
+
+The <SAMP>`drive_number'</SAMP> field contains the BIOS drive number. The
+<SAMP>`drive_mode'</SAMP> field represents the access mode used by the boot
+loader. Currently, the following modes are defined:
+</P><P>
+
+<DL COMPACT>
+<DT><SAMP>`0'</SAMP>
+<DD>CHS mode (traditional cylinder/head/sector addressing mode).
+<P>
+
+<DT><SAMP>`1'</SAMP>
+<DD>LBA mode (Logical Block Addressing mode).
+</DL>
+<P>
+
+The three fields, <SAMP>`drive_cylinders'</SAMP>, <SAMP>`drive_heads'</SAMP> and
+<SAMP>`drive_sectors'</SAMP>, indicate the geometry of the drive detected by the
+BIOS. <SAMP>`drive_cylinders'</SAMP> contains the number of the
+cylinders. <SAMP>`drive_heads'</SAMP> contains the number of the
+heads. <SAMP>`drive_sectors'</SAMP> contains the number of the sectors per
+track.
+</P><P>
+
+The <SAMP>`drive_ports'</SAMP> field contains the physical address of the array
+of the I/O ports used for the drive in the BIOS code. The array
+consists of zero or more unsigned two-bytes integers, and is terminated
+with zero. Note that the array may contain any number of I/O ports that
+are not related to the drive actually (such as DMA controller's
+ports).
+</P><P>
+
+The last field <SAMP>`reserved'</SAMP> is reserved for future use, and must be
+zero. The size is four bytes.
+</P><P>
+
+If bit 8 in the <SAMP>`flags'</SAMP> is set, then the <SAMP>`config_table'</SAMP> field
+is valid, and indicates the address of the ROM configuration table
+returned by the <EM>GET CONFIGURATION</EM> BIOS call. If the BIOS
+call fails, then the size of the table must be <EM>zero</EM>.
+</P><P>
+
+If bit 9 in the <SAMP>`flags'</SAMP> is set, the <SAMP>`boot_loader_name'</SAMP> field
+is valid, and contains the physical address of the name of the boot
+loader booting the kernel. The name is a normal C-style zero-terminated
+string.
+</P><P>
+
+If bit 11 in the <SAMP>`flags'</SAMP> is set, video mode information is
+available in the mode table. This should only be done if the kernel has
+indicated in the <SAMP>`Multiboot Header'</SAMP> that it accepts graphics modes.
+</P><P>
+
+The mode table looks like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>
+        +----------------------+
+0       | mode_type            |
+4       | width                |
+8       | height               |
+12      | depth                |
+16      | frame_buffer_address |
+        +----------------------+
+
+</pre></td></tr></table></P><P>
+
+Valid numbers for <SAMP>`mode_type'</SAMP> is 0 for linear graphics mode and 1
+for EGA-standard text mode. Everything else is reserved for future
+expansion.
+</P><P>
+
+<SAMP>`width'</SAMP> and <SAMP>`height'</SAMP> is specified in pixels, if graphics mode,
+or characters in EGA text mode. <SAMP>`depth'</SAMP> is given in bits per pixel
+for graphics, or unused for EGA text mode.
+</P><P>
+
+<SAMP>`frame_buffer_address'</SAMP> specifies the physical start address of the
+linear frame buffer. This is valid for both graphics and text modes.
+</P><P>
+
+<A NAME="Examples"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_4.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_5.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_6.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="multiboot_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>root</I> on <I>February, 25  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

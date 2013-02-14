@@ -1,0 +1,583 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Detailed descriptions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Odin OS: Design and Implementation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="Ways to achieve goals"
+HREF="x56.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Odin OS: Design and Implementation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x56.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN70"
+>Detailed descriptions</A
+></H1
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN72"
+>Programming language of choice</A
+></H2
+>
+   
+   <A
+NAME="AEN74"
+></A
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="BLOCKQUOTE"
+><TR
+><TD
+WIDTH="10%"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+WIDTH="80%"
+VALIGN="TOP"
+>&#13;   <P
+>There ain't such thing as a free lunch.</P
+>
+   </TD
+><TD
+WIDTH="10%"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+COLSPAN="2"
+ALIGN="RIGHT"
+VALIGN="TOP"
+>--<SPAN
+CLASS="attribution"
+>Robert Heinlein, "Moon is a Harsh Mistress"</SPAN
+></TD
+><TD
+WIDTH="10%"
+>&nbsp;</TD
+></TR
+></TABLE
+>
+   
+   <P
+>This operating system turns to become standing out of the mainstream way.
+   While many UN*X proponents started using programs in truly UNIX way - small programs
+   doing only their own job - there are plenty of huge bloated programs, that came from
+   windows era and made it straight into UNIX environment because of so-called
+   "portability". No, I'm not against "portability", but dragging tonnes of red-tape
+   from one system to another with different rules and traditions - that's nonsense.
+   </P
+>
+   
+   <P
+>Odin is aimed from the very start to serving a multitude of small components
+   using strictly specified interfaces and doing their only job the best possible way.
+   </P
+>
+   
+   <P
+>This doesn't require inventing a completely new language, and many old ones
+   can still serve their purpose. But, honestly, many languages suffer from bloat syndrome,
+   some other from inportability or idiosyncrasy.
+   </P
+>
+   
+   <P
+>The needed language is one that fulfills the following requirements:
+   <P
+></P
+><UL
+><LI
+>&#13;      <P
+>Easy separation of interface and implementation</P
+>
+      <P
+>Minimal amount of red-tape and ambiguities is required</P
+>
+      <P
+>Java is a good pretender for this position</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Have some form of support for (intricate) Odin inter-component communications</P
+>
+      <P
+>Almost anything from NASM to Perl can use some kind of wrappers to hide this complexity</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Should not specify any memory allocation policies, and be ready to easily integrate Odin's strategies</P
+>
+      <P
+>C/C++ is rather flexible here with malloc/new that can be redefined, but not
+      Java, with its sophisticated garbage collector</P
+>
+      <P
+>Oberon doesn't fit here for the same reason</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Low-level enough to be able to express most of processor-level instructions
+      without resorting to assembly.</P
+>
+      <P
+>C/C++, Modula-2 fit here just fine.</P
+>
+      </LI
+><LI
+>&#13;      <P
+></P
+>
+      </LI
+><LI
+>&#13;      <P
+></P
+>
+      </LI
+><LI
+>&#13;      <P
+></P
+>
+      </LI
+></UL
+>
+   </P
+>
+
+   <P
+>I wasn't able to figure out a language that would do all that and be simple and
+   precise. So I invented Deft.
+   </P
+>
+
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN103"
+>Deft</A
+></H3
+>
+      
+      <P
+>The language is rather simple. Most of the operations is performed by functions,
+      optimized for target architecture. Language syntax is pushed towards that of C and
+      Oberon, with effort to decrease or even eliminate ambiguities that may rise.
+      </P
+>
+      
+      <P
+>There are two parts of the same language, processed by the same compiler:
+      <P
+></P
+><UL
+><LI
+>&#13;         <P
+>Interface specification.</P
+>
+         <P
+>This is where inter-component interfaces are specified.</P
+>
+         </LI
+><LI
+>&#13;         <P
+>Component specification.</P
+>
+         <P
+>This is where actual program is implemented.</P
+>
+         </LI
+></UL
+>
+      </P
+>
+      
+      <P
+>For simplicity, Deft doesn't support classes or any other "modern"
+      OOP things besides interfaces. The language is component-oriented, and since
+      components are notably small, it eliminated the need for more fine-grained
+      decomposition. This also helps keep syntax laconic and compiler fast.
+      </P
+>
+      
+      </DIV
+>
+   
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN115"
+>Components</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN117"
+>"Do only one thing, but do it best" approach</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN119"
+>Exokernel</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN121"
+>General decomposition</A
+></H3
+>
+         <P
+>The operating system is built of finely-grained set of interoperable replaceable components.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN124"
+>Basic system core: The ORB</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN126"
+>Functional end-user OS implementation</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN128"
+>Protection mechanisms</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN130"
+>SISR</A
+></H3
+>
+         <P
+>Only one privilege level across the system. All components run in ring 0 (superuser) mode.</P
+>
+         <P
+>SISR (Software Instruction Set Reduction) also known as soft-scanning is used to ensure no
+         untrusted components are going to run trusted code.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN134"
+>i386-imposed protection possibilities</A
+></H3
+>
+         <P
+>Each component is established in its own protection domain (PD).</P
+>
+         <P
+>Segment-based protection of component domains.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN138"
+>"interface facets"</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN140"
+>Persistence</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN142"
+>Persistent Object Filesystem - a persistent storage</A
+></H3
+>
+         <P
+>Use of Reiser filesystem, versions 4 and up for efficient and extensible
+         file-storage.</P
+>
+         <P
+>Reiser4 and up allows efficient databases storage, file storage, extended
+         attributes, versioning methods et cetera.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN146"
+>Containers - components from filesystem point of view</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN148"
+>Implicit persistence - general approach</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN150"
+>Explicit persistence - specialized apps (e.g. databases) requirements</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN152"
+>Distribution</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN154"
+>The ORB variants - providing the best service possible</A
+></H3
+>
+         <P
+>Convenient ORB is local-only, RPC is implemented as ORB's exception handler,
+         which in turn can employ Marshalling components and such.. Network latency is
+         far longer than any fault/inter-component overhead.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN157"
+>Client/server IPC</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN159"
+>Mobility - configurability in heterogenous dynamic network environment</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN161"
+>User-friendliness</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN163"
+>CLUEless (Command-Line User Environment-less) approach</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+</DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x56.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ways to achieve goals</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

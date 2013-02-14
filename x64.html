@@ -1,0 +1,380 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Detailed descriptions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Odin OS: Design and Implementation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="Ways to achieve goals"
+HREF="x50.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Odin OS: Design and Implementation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x50.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN64"
+>Detailed descriptions</A
+></H1
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN66"
+>Components</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN68"
+>"Do only one thing, but do it best" approach</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN70"
+>Exokernel</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN72"
+>General decomposition</A
+></H3
+>
+         <P
+>The operating system is built of finely-grained set of interoperable replaceable components.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN75"
+>Basic system core: The ORB</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN77"
+>Functional end-user OS implementation</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN79"
+>Protection mechanisms</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN81"
+>SISR</A
+></H3
+>
+         <P
+>Only one privilege level across the system. All components run in ring 0 (superuser) mode.</P
+>
+         <P
+>SISR (Software Instruction Set Reduction) also known as soft-scanning is used to ensure no
+         untrusted components are going to run trusted code.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN85"
+>i386-imposed protection possibilities</A
+></H3
+>
+         <P
+>Each component is established in its own protection domain (PD).</P
+>
+         <P
+>Segment-based protection of component domains.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN89"
+>"interface facets"</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN91"
+>Persistence</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN93"
+>Persistent Object Filesystem - a persistent storage</A
+></H3
+>
+         <P
+>Use of Reiser filesystem, versions 4 and up for efficient and extensible
+         file-storage.</P
+>
+         <P
+>Reiser4 and up allows efficient databases storage, file storage, extended
+         attributes, versioning methods et cetera.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN97"
+>Containers - components from filesystem point of view</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN99"
+>Implicit persistence - general approach</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN101"
+>Explicit persistence - specialized apps (e.g. databases) requirements</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN103"
+>Distribution</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN105"
+>The ORB variants - providing the best service possible</A
+></H3
+>
+         <P
+>Convenient ORB is local-only, RPC is implemented as ORB's exception handler,
+         which in turn can employ Marshalling components and such.. Network latency is
+         far longer than any fault/inter-component overhead.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN108"
+>Client/server IPC</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN110"
+>Mobility - configurability in heterogenous dynamic network environment</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN112"
+>User-friendliness</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN114"
+>CLUEless (Command-Line User Environment-less) approach</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+</DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x50.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ways to achieve goals</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

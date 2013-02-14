@@ -1,0 +1,923 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Detailed descriptions.</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Odin OS: Design and Implementation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="Ways to achieve goals."
+HREF="x57.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Odin OS: Design and Implementation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x57.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN71"
+>Detailed descriptions.</A
+></H1
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN73"
+>Programming language of choice.</A
+></H2
+>
+   
+   <TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+>&#13;   <P
+><I
+>There's ain't such thing as a free lunch.</I
+></P
+>
+   </I
+></TD
+></TR
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><I
+><SPAN
+CLASS="attribution"
+>Robert Heinlein, "Moon is a Harsh Mistress".</SPAN
+></I
+></TD
+></TR
+></TABLE
+>
+   
+   <P
+>This operating system turns to become standing out of the mainstream way.
+   While many UN*X proponents started using programs in truly UNIX way - small programs
+   doing only their own job - there are plenty of huge bloated programs, that came from
+   windows era and made it straight into UNIX environment because of so-called
+   "portability". No, I'm not against "portability", but dragging tonnes of red-tape
+   from one system to another with different rules and traditions - that's nonsense.
+   </P
+>
+   
+   <P
+>Odin is aimed from the very start to serving a multitude of small components
+   using strictly specified interfaces and doing their only job the best possible way.
+   </P
+>
+   
+   <P
+>This doesn't require inventing a completely new language, and many old ones
+   can still serve their purpose. But, honestly, many languages suffer from bloat syndrome,
+   some other from inportability or idiosyncrasy.
+   </P
+>
+   
+   <P
+>The needed language is one that fulfills the following requirements:
+   <P
+></P
+><UL
+><LI
+>&#13;      <P
+>Easy separation of interface and implementation.</P
+>
+      <P
+>Minimal amount of red-tape and ambiguities is a must.</P
+>
+      <P
+>Java is a good pretender for this position.</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Have some form of support for (intricate) Odin inter-component communications.</P
+>
+      <P
+>Almost anything from NASM to Perl can use some kind of wrappers to hide this complexity.</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Should not specify any memory allocation policies, and be ready to easily integrate Odin's strategies.</P
+>
+      <P
+>C/C++ is rather flexible here with malloc/new that can be redefined, but not
+      Java, with its sophisticated garbage collector.</P
+>
+      <P
+>Oberon doesn't fit here for the same reason.</P
+>
+      </LI
+><LI
+>&#13;      <P
+>Low-level enough to be able to express most of processor-level instructions
+      without resorting to assembly.</P
+>
+      <P
+>C/C++, Modula-2 fit here just fine.</P
+>
+      </LI
+></UL
+>
+   </P
+>
+
+   <P
+>I wasn't able to figure out a language that would do all that and be simple and
+   precise. So I invented Bor.
+   </P
+>
+
+      
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN98"
+>Bor.</A
+></H3
+>
+
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN100"
+>Introduction</A
+></H4
+>      
+      <P
+>The language is rather simple. Most of the operations is performed by functions,
+      optimized for target architecture. Language syntax is pushed towards that of C and
+      Oberon, with effort to decrease or even eliminate ambiguities that may rise.
+      </P
+>
+      
+      <P
+>There are two parts of the same language, processed by the same compiler:
+      <P
+></P
+><UL
+><LI
+>&#13;         <P
+>Interface specification.</P
+>
+         <P
+>This is where inter-component interfaces are specified.</P
+>
+         </LI
+><LI
+>&#13;         <P
+>Component specification.</P
+>
+         <P
+>This is where actual program is implemented.</P
+>
+         </LI
+></UL
+>
+      </P
+>
+      
+      <P
+>For simplicity, Bor doesn't support classes or any other "modern"
+      OOP things besides interfaces. The language is component-oriented, and since
+      components are notably small, it eliminated the need for more fine-grained
+      decomposition. This also helps keep syntax laconic and compiler fast.
+      </P
+>
+      </DIV
+>
+
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN112"
+>Syntax.</A
+></H4
+>
+      <P
+>An extended Backus-Naur Formalism (EBNF) is used to describe the 
+      syntax of Bor:
+      <P
+></P
+><UL
+><LI
+>&#13;         <P
+>Alternatives are separated by |.</P
+>
+         </LI
+><LI
+>&#13;         <P
+>Brackets [ and ] denote optionality of the enclosed expression, and</P
+>
+         </LI
+><LI
+>&#13;         <P
+>curly braces { and } denote its repetition (possibly 0 times).</P
+>
+         </LI
+><LI
+>&#13;         <P
+>Syntactic entities (non-terminal symbols) start with an upper-case letter (e.g. Statement).</P
+>
+         </LI
+><LI
+>&#13;         <P
+>Symbols from language vocabulary (terminal symbols) either start with lower-case letter (e.g. ident), or
+         are written all in upper-case letters (e.g. WHILE), or are denoted by strings (e.g. ":=").
+         </P
+>
+         </LI
+></UL
+>
+      </P
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN126"
+>Vocabulary and Representation.</A
+></H4
+>
+      
+      <P
+>The representation of (terminal) symbols in terms of characters is defined
+      using the UNICODE set (in UTF-8 encoding). Symbols are identifiers, numbers, strings,
+      operators, and delimiters. The following lexical rules must be observed: Blanks and
+      line breaks may not occur within symbols (except in comments, and blanks in strings).
+      They are ignored unless they are essential to separate two consecutive symbols.
+      Capital and lower-case letters are considered distinct.
+      </P
+>
+      
+      <P
+></P
+><OL
+TYPE="1"
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Identifiers</I
+></P
+>
+         </LI
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Numbers</I
+></P
+>
+         </LI
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Character constants</I
+></P
+>
+         </LI
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Strings</I
+></P
+>
+         </LI
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Operators</I
+> and <I
+CLASS="emphasis"
+>delimiters</I
+></P
+>
+         </LI
+><LI
+>&#13;         <P
+><I
+CLASS="emphasis"
+>Comments</I
+></P
+>
+         </LI
+></OL
+>
+
+      <P
+>EBNF DocBook tags: constraintdef, productionrecap.
+      
+<FONT
+COLOR="RED"
+><P
+><B
+>Arithemetic Expressions</B
+></P
+>
+<FONT
+COLOR="RED"
+>&#13;  <FONT
+COLOR="RED"
+>Expression</FONT
+>
+  <FONT
+COLOR="RED"
+><FONT
+COLOR="RED"
+>ArithExpression</FONT
+> |
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+>
+  Does this grammar actually get precedence right?
+  
+  </FONT
+>
+</FONT
+>
+<FONT
+COLOR="RED"
+>&#13;  <FONT
+COLOR="RED"
+>ArithExpression</FONT
+>
+  <FONT
+COLOR="RED"
+><FONT
+COLOR="RED"
+>Expression</FONT
+>
+       '+'
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+> |
+       <FONT
+COLOR="RED"
+>Expression</FONT
+>
+       '-'
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+>
+  </FONT
+>
+</FONT
+>
+<FONT
+COLOR="RED"
+>&#13;  <FONT
+COLOR="RED"
+>MultExpression</FONT
+>
+  <FONT
+COLOR="RED"
+><FONT
+COLOR="RED"
+>MultExpression</FONT
+>
+       '*'
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+> |
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+>
+       '/'
+       <FONT
+COLOR="RED"
+>MultExpression</FONT
+> |
+       <FONT
+COLOR="RED"
+>Number</FONT
+>
+  </FONT
+>
+  <FONT
+COLOR="RED"
+></FONT
+>
+</FONT
+>
+<FONT
+COLOR="RED"
+>&#13;  <FONT
+COLOR="RED"
+>Number</FONT
+>
+  <FONT
+COLOR="RED"
+>[0-9]+</FONT
+>
+</FONT
+>
+</FONT
+>      
+      </P
+>
+      
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN177"
+>Declarations and scope rules</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN179"
+>Constant declarations</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN181"
+>Type declarations</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN183"
+>Variable declarations</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN185"
+>Expressions</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN187"
+>Statements</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN189"
+>Procedure declarations</A
+></H4
+>
+      </DIV
+>
+      
+      <DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN191"
+>Modules</A
+></H4
+>
+      </DIV
+>
+      
+      </DIV
+>
+      
+   
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN193"
+>Components.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN195"
+>"Do only one thing, but do it best" approach.</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN197"
+>Exokernel.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN199"
+>General decomposition.</A
+></H3
+>
+         <P
+>The operating system is built of finely-grained set of interoperable replaceable components.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN202"
+>Basic system core: The ORB.</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN204"
+>Functional end-user OS implementation.</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN206"
+>Protection mechanisms.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN208"
+>SISR.</A
+></H3
+>
+         <P
+>Only one privilege level across the system. All components run in ring 0 (superuser) mode.</P
+>
+         <P
+>SISR (Software Instruction Set Reduction) also known as soft-scanning is used to ensure no
+         untrusted components are going to run trusted code.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN212"
+>i386-imposed protection possibilities.</A
+></H3
+>
+         <P
+>Each component is established in its own protection domain (PD).</P
+>
+         <P
+>Segment-based protection of component domains.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN216"
+>"interface facets".</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN218"
+>Persistence.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN220"
+>Persistent Object Filesystem - a persistent storage.</A
+></H3
+>
+         <P
+>Use of Reiser filesystem, versions 4 and up for efficient and extensible
+         file-storage.</P
+>
+         <P
+>Reiser4 and up allows efficient databases storage, file storage, extended
+         attributes, versioning methods et cetera.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN224"
+>Containers - components from filesystem point of view.</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN226"
+>Implicit persistence - general approach.</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN228"
+>Explicit persistence - specialized apps (e.g. databases) requirements.</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN230"
+>Distribution.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN232"
+>The ORB variants - providing the best service possible.</A
+></H3
+>
+         <P
+>Convenient ORB is local-only, RPC is implemented as ORB's exception handler,
+         which in turn can employ Marshalling components and such.. Network latency is
+         far longer than any fault/inter-component overhead.</P
+>
+      </DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN235"
+>Client/server ICC.</A
+></H3
+></DIV
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN237"
+>Mobility - configurability in heterogenous dynamic network environment.</A
+></H3
+></DIV
+>
+   </DIV
+>
+   
+   <DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN239"
+>User-friendliness.</A
+></H2
+>
+      <DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN241"
+>CLUEless (Command-Line User Environment-less) approach.</A
+></H3
+></DIV
+>
+   </DIV
+>
+
+</DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x57.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ways to achieve goals.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

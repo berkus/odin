@@ -1,6 +1,0 @@
-/* libos entry comp */
-
-interface micro : Runnable
-{
-   void test( uint p1, uint p2 );
-};

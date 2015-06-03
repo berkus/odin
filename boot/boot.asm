@@ -233,7 +233,7 @@ read_sectors:
 .read_next_sector:
 
    ; -- display progress (blocks..)
-   mov  ax, 0x0EFE                                         ; 0E = teletype service, FE = 'þ'
+   mov  ax, 0x0EFE                                         ; 0E = teletype service, FE = 'Ã¾'
    xor  bx, bx                                             ; select screen 0, no color
    int  0x10                                               ; ask for bios video service
 
@@ -388,7 +388,7 @@ move_image:
 
    ; -- zero bss
    ; Note: since orb doesn't have bss upon boot time, we're safe to remove bss
-   ; zeroing and save a few bytes at cost of loosing multiboot compliance.
+   ; zeroing and save a few bytes at cost of losing multiboot compliance.
 
    mov  ecx, ebx                                           ; zero BSS
    xchg eax, ebx                                           ; save image location to EBX
